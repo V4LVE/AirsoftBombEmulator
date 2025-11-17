@@ -1,18 +1,19 @@
 #include <Arduino.h>
+#include "Controllers/DisplayController.h"
+
+DisplayController displayController;
 
 // put function declarations here:
 int myFunction(int, int);
 
 void setup() {
   // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  displayController.initializeDisplay();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  displayController.writeMenuScreen();
+  delay(2000);
+  displayController.writeGameMenu();
+  delay(2000);
 }
