@@ -8,6 +8,7 @@ void handleBuzzer(int totalSeconds);
 void handleAssetCapture();
 void drawProgressBar(float progress);
 void setCurrentTeamCapture();
+void displayEndGameStats();
 
 bool bombIsBlue = false;
 bool bombIsRed = false;
@@ -39,26 +40,27 @@ void startDominationMode() {
 
     }
     
+    displayController.lcd.clear();
     int totalSeconds = dominationGameMinutes * 60;
 
     while (totalSeconds >= 0)
     {
         unsigned long now = millis();
 
-        if (bombIsBlue && !bombIsRed) {
-            blueTime += 1;   // Blue gains 1 second
-        }
-        else if (bombIsRed && !bombIsBlue) {
-            redTime += 1;    // Red gains 1 second
-        }
-
         if (now - lastUpdate >= 1000 && totalSeconds >= 0) {
             lastUpdate = now;
+
+            if (bombIsBlue && !bombIsRed) {
+                blueTime += 1;   // Blue gains 1 second
+            }
+            else if (bombIsRed && !bombIsBlue) {
+                redTime += 1;    // Red gains 1 second
+            }
 
             int minutes = totalSeconds / 60;
             int seconds = totalSeconds % 60;
 
-            displayController.lcd.clear();
+            
             displayController.lcd.setCursor(0, 1);
             displayController.lcd.print("Time: ");
             if (minutes < 10) displayController.lcd.print("0");
@@ -71,6 +73,16 @@ void startDominationMode() {
             handleAssetCapture();
             setCurrentTeamCapture();
             totalSeconds--;
+        }
+    }
+
+    displayEndGameStats();
+
+    bool exit = false;
+    while (!exit) {
+        char key = customKeyPad.getKey();
+        if (key == 'B') {
+            exit = true;
         }
     }
 }
@@ -110,8 +122,11 @@ void handleAssetCapture() {
   bool bluePressed = digitalRead(BUTTON_PIN_BLUE) == LOW; // LOW if pressed
   bool redPressed  = digitalRead(BUTTON_PIN_RED) == LOW;   // LOW if pressed
 
-  Serial.println("bluePressed: " + String(bluePressed));
-  Serial.println("redPressed: " + String(redPressed));
+  if (!blueHolding && !redHolding)
+  {
+    drawProgressBar(0);
+  }
+  
 
   // If both are pressed → ignore (prevents conflict)
   if (bluePressed && redPressed) {
@@ -126,8 +141,7 @@ void handleAssetCapture() {
   if (bluePressed) {
 
     // If blue already owns the asset → do nothing
-    if (bombIsBlue && !bombIsRed) {
-      blueHolding = false;
+    if (bombIsBlue) {
       return;
     }
 
@@ -145,18 +159,20 @@ void handleAssetCapture() {
     if (heldFor >= neutralTime && (bombIsRed || bombIsBlue)) {
       bombIsBlue = false;
       bombIsRed = false;
+      setCurrentTeamCapture();
     }
 
     // AFTER 10s: capture for BLUE
     if (heldFor >= captureTime && !bombIsBlue && !bombIsRed) {
       bombIsBlue = true;
       bombIsRed = false;
+      setCurrentTeamCapture();
       drawProgressBar(1.0); // full bar
     }
   }
   else {
     blueHolding = false; // Button released
-    drawProgressBar(0);
+    //drawProgressBar(0);
   }
 
   // -----------------------------
@@ -165,8 +181,7 @@ void handleAssetCapture() {
   if (redPressed) {
 
     // If red already owns the asset → do nothing
-    if (bombIsRed && !bombIsBlue) {
-      redHolding = false;
+    if (bombIsRed) {
       return;
     }
 
@@ -176,7 +191,6 @@ void handleAssetCapture() {
     }
 
     unsigned long heldFor = now - redHoldStart;
-
     float progress = min(1.0, heldFor / 10000.0);
     drawProgressBar(progress);
 
@@ -184,6 +198,7 @@ void handleAssetCapture() {
     if (heldFor >= neutralTime && (bombIsRed || bombIsBlue)) {
       bombIsBlue = false;
       bombIsRed = false;
+      setCurrentTeamCapture();
     }
 
     // AFTER 10s: capture for RED
@@ -191,17 +206,18 @@ void handleAssetCapture() {
       bombIsRed = true;
       bombIsBlue = false;
       drawProgressBar(1.0);
+      setCurrentTeamCapture();
     }
   }
   else {
     redHolding = false;
-    drawProgressBar(0);
+    //drawProgressBar(0);
   }
 }
 
 void drawProgressBar(float progress) {
     // progress range: 0.0 → 1.0
-    int totalCells = 16;  
+    int totalCells = 20;  
     int filledCells = progress * totalCells * 5; // convert to 1/5th segments
 
     displayController.lcd.setCursor(0, 0);
@@ -223,16 +239,51 @@ void setCurrentTeamCapture()
 {
     displayController.lcd.setCursor(0, 2);
     if (bombIsBlue && !bombIsRed) {
-        displayController.lcd.print("Blue Team Captured ");
+        displayController.lcd.print("Blue Team Has Bomb ");
     }
     else if (bombIsRed && !bombIsBlue) {
-        displayController.lcd.print("Red Team Captured  ");
+        displayController.lcd.print("Red Team Has Bomb  ");
     }
     else {
-        displayController.lcd.print("Bomb is neutral");
+        displayController.lcd.print("Bomb Is Neutralized");
     }
 }
-    
+ 
+void displayEndGameStats()
+{
+    unsigned long blueM = blueTime / 60;
+    unsigned long blueS = blueTime % 60;
+
+    unsigned long redM = redTime / 60;
+    unsigned long redS = redTime % 60;
+
+    displayController.lcd.clear();
+
+
+    displayController.lcd.setCursor(0, 0);
+    displayController.lcd.print("Game Over!");
+
+    // BLUE LINE
+    displayController.lcd.setCursor(0, 1);
+    displayController.lcd.print("Blue: ");
+    if (blueM < 10) displayController.lcd.print("0");
+    displayController.lcd.print(blueM);
+    displayController.lcd.print(":");
+    if (blueS < 10) displayController.lcd.print("0");
+    displayController.lcd.print(blueS);
+
+    // RED LINE
+    displayController.lcd.setCursor(0, 2);
+    displayController.lcd.print("Red : ");
+    if (redM < 10) displayController.lcd.print("0");
+    displayController.lcd.print(redM);
+    displayController.lcd.print(":");
+    if (redS < 10) displayController.lcd.print("0");
+    displayController.lcd.print(redS);
+
+    displayController.lcd.setCursor(0, 3);
+    displayController.lcd.print("Press B to Exit");
+}
 
 void enterGameTime()
 {
