@@ -4,6 +4,12 @@
 #include <keypad.h>
 #include <Config.h>
 
+byte bar1[8] = {B10000,B10000,B10000,B10000,B10000,B10000,B10000,B10000};
+byte bar2[8] = {B11000,B11000,B11000,B11000,B11000,B11000,B11000,B11000};
+byte bar3[8] = {B11100,B11100,B11100,B11100,B11100,B11100,B11100,B11100};
+byte bar4[8] = {B11110,B11110,B11110,B11110,B11110,B11110,B11110,B11110};
+byte bar5[8] = {B11111,B11111,B11111,B11111,B11111,B11111,B11111,B11111};
+
 Keypad customKeyPad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 DisplayController displayController;
 
@@ -67,9 +73,8 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   Serial.println("Airsoft Bomb Emulator Starting...");
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(BUTTON_PIN_BLUE, INPUT_PULLUP);
   pinMode(BUZZER_PIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
 
   customKeyPad.addEventListener( keypadEvent );
 

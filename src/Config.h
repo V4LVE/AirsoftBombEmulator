@@ -4,6 +4,9 @@
 
 const int BUZZER_PIN = 10;
 
+const int BUTTON_PIN_BLUE = 11;
+const int BUTTON_PIN_RED = 12;
+
 const byte ROWS = 4; // four rows
 const byte COLS = 4; // four columns
 // Map the buttons to an array for the Keymap instance

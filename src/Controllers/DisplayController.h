@@ -1,6 +1,12 @@
 #ifndef DISPLAYCONTROLLER_H
 #define DISPLAYCONTROLLER_H
 
+extern byte bar1[8];
+extern byte bar2[8];
+extern byte bar3[8];
+extern byte bar4[8];
+extern byte bar5[8];
+
 #include <Arduino.h>
 #include <Config.h>
 
@@ -21,6 +27,11 @@ public:
     lcd.setBacklight(HIGH); // NOTE: You can turn the backlight off by setting it to LOW instead of HIGH
     lcd.begin(20, 4);
     lcd.clear();
+    lcd.createChar(0, bar1);
+    lcd.createChar(1, bar2);
+    lcd.createChar(2, bar3);
+    lcd.createChar(3, bar4);
+    lcd.createChar(4, bar5);
     writeTestMessage();
   }
 
