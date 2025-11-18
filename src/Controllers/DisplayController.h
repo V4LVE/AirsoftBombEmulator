@@ -15,6 +15,7 @@ extern byte bar5[8];
 #include <LCD.h>
 
 extern int dominationGameMinutes;
+extern int defuseGameMinutes;
 
 class DisplayController {
 public:
@@ -69,6 +70,20 @@ public:
     lcd.print("2. Set Time");
     lcd.setCursor(0, 3);
     lcd.print("Time " + String(dominationGameMinutes) + " mins");
+    lcd.setCursor(17, 3);
+    lcd.print("B >");
+    }
+
+    void writeDefuseMenu() {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Defuse Mode");
+    lcd.setCursor(0, 1);
+    lcd.print("1. Start Game");
+    lcd.setCursor(0, 2);
+    lcd.print("2. Set Time");
+    lcd.setCursor(0, 3);
+    lcd.print("Time " + String(defuseGameMinutes) + " mins");
     lcd.setCursor(17, 3);
     lcd.print("B >");
     }

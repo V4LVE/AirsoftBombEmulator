@@ -20,12 +20,4 @@ extern byte bar5[8];
 void startDominationMode();
 void enterGameTime();
 
-void updateDominationTimer();
-
-// Query timer state
-bool isDominationTimerRunning();
-
-// Provide an optional callback for when timer reaches zero
-void setDominationEndCallback(void (*cb)());
-
 #endif;

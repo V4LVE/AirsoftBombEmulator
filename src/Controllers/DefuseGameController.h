@@ -9,12 +9,15 @@
 extern DisplayController displayController;
 extern Keypad customKeyPad;
 
-extern int dominationGameMinutes;
+extern int defuseGameMinutes;
 
 extern byte bar1[8];
 extern byte bar2[8];
 extern byte bar3[8];
 extern byte bar4[8];
 extern byte bar5[8];
+
+void startDefuseMode();
+void enterGameTimeDefuse();
 
 #endif

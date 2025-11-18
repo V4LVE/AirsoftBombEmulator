@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "Controllers/DisplayController.h"
 #include "Controllers/DominationGameController.h"
+#include "Controllers/DefuseGameController.h"
 #include <keypad.h>
 #include <Config.h>
 
@@ -14,11 +15,13 @@ Keypad customKeyPad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS
 DisplayController displayController;
 
 int dominationGameMinutes = 0;
+int defuseGameMinutes = 0;
 
 enum MenuState {
     MAIN_MENU,
     GAME_MENU,
     SETUP_GAME_MENU_DOMINATION,
+    SETUP_GAME_MENU_DEFUSE,
     IN_GAME_DOMINATION,
     IN_GAME_DEFUSE,
     IN_GAME_SABOTAGE,
@@ -40,7 +43,8 @@ void keypadEvent(KeypadEvent key){
             menustate = SETUP_GAME_MENU_DOMINATION;
             displayController.writeDominationMenu();
           } else if (key == '2') {
-            //startTeamEliminationMode();
+            menustate = SETUP_GAME_MENU_DEFUSE;
+            displayController.writeDefuseMenu();
           } else if (key == '3') {
             //startCaptureMode();
           } else if (key == 'B') { // back to main menu
@@ -59,6 +63,23 @@ void keypadEvent(KeypadEvent key){
             menustate = SET_TIME_MENU;
             enterGameTime();
             menustate = SETUP_GAME_MENU_DOMINATION;
+          }
+          else if (key == 'B') { // back to game menu
+            menustate = GAME_MENU;
+            displayController.writeGameMenu();
+          } 
+        } else if (menustate == SETUP_GAME_MENU_DEFUSE) { // in defuse game mode
+          if (key == '1')
+          {
+            menustate = IN_GAME_DEFUSE;
+            //startDefuseMode();
+            menustate = SETUP_GAME_MENU_DEFUSE;
+          }
+          else if (key == '2')
+          {
+            menustate = SET_TIME_MENU;
+            enterGameTimeDefuse();
+            menustate = SETUP_GAME_MENU_DEFUSE;
           }
           else if (key == 'B') { // back to game menu
             menustate = GAME_MENU;
