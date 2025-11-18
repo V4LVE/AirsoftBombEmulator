@@ -10,8 +10,6 @@
 
 extern int dominationGameMinutes;
 
-static int menuState = 0;
-
 class DisplayController {
 public:
   DisplayController() {}

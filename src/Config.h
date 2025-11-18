@@ -2,6 +2,8 @@
 
 #include <Arduino.h>  
 
+const int BUZZER_PIN = 10;
+
 const byte ROWS = 4; // four rows
 const byte COLS = 4; // four columns
 // Map the buttons to an array for the Keymap instance

@@ -68,6 +68,7 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Airsoft Bomb Emulator Starting...");
   pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
 
   customKeyPad.addEventListener( keypadEvent );
