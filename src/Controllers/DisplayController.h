@@ -8,11 +8,15 @@
 #include <Wire.h>
 #include <LCD.h>
 
-LiquidCrystal_I2C  lcd(0x27,2,1,0,4,5,6,7); // 0x3F dette er adressen vi har findet i "Scanner koden"
+extern int dominationGameMinutes;
+
+static int menuState = 0;
 
 class DisplayController {
 public:
   DisplayController() {}
+
+    LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,2,1,0,4,5,6,7);
 
     void initializeDisplay() {
     lcd.setBacklightPin(3,POSITIVE);
@@ -24,8 +28,8 @@ public:
 
   void writeMenuScreen() {
     lcd.clear();
-    lcd.setCursor(5, 0);
-    lcd.print("Main Menu:");
+    lcd.setCursor(0, 0);
+    lcd.print("--Airsoftelite.dk--");
     lcd.setCursor(0, 1);
     lcd.print("1. Select Gamemode");
     lcd.setCursor(0, 2);
@@ -42,16 +46,43 @@ public:
     lcd.print("2. Defuse the Bomb");
     lcd.setCursor(0, 3);
     lcd.print("3. Sabotage");
+    lcd.setCursor(17, 3);
+    lcd.print("B >");
+    }
 
+    void writeDominationMenu() {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Domination Mode");
+    lcd.setCursor(0, 1);
+    lcd.print("1. Start Game");
+    lcd.setCursor(0, 2);
+    lcd.print("2. Set Time");
+    lcd.setCursor(0, 3);
+    lcd.print("Time " + String(dominationGameMinutes) + " mins");
+    lcd.setCursor(17, 3);
+    lcd.print("B >");
+    }
+
+    void setTimeMenu() {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Set Game Time:");
+    lcd.setCursor(0, 1);
+    lcd.print("Time in minutes:");
+    lcd.setCursor(0, 3);
+    lcd.print("Press A to set");
     }
 
 private:
     void writeTestMessage() {
     lcd.setCursor(0, 0);
-    lcd.print("Airsoft Bomb Sim");
+    lcd.print("--Airsoftelite.dk--");
     lcd.setCursor(0, 1);
     lcd.print("Initialized...");
     }
+
+
 };
 
-#endif
+#endif;
