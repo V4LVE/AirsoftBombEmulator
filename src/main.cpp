@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "Controllers/DisplayController.h"
-#include "Controllers/GameController.h"
+#include "Controllers/DominationGameController.h"
 #include <keypad.h>
 #include <Config.h>
 

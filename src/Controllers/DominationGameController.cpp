@@ -1,4 +1,4 @@
-#include "GameController.h"
+#include "DominationGameController.h"
 #include <Arduino.h>
 
 String dominationTimeInput = "";
@@ -172,7 +172,6 @@ void handleAssetCapture() {
   }
   else {
     blueHolding = false; // Button released
-    //drawProgressBar(0);
   }
 
   // -----------------------------
@@ -211,7 +210,6 @@ void handleAssetCapture() {
   }
   else {
     redHolding = false;
-    //drawProgressBar(0);
   }
 }
 

@@ -1,5 +1,5 @@
-#ifndef GAMECONTROLLER_H
-#define GAMECONTROLLER_H
+#ifndef DOMINATIONGAMECONTROLLER_H
+#define DOMINATIONGAMECONTROLLER_H
 
 #include <Arduino.h>
 #include "DisplayController.h"
