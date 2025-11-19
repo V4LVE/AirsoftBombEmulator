@@ -27,7 +27,7 @@ const unsigned long captureTime = 10000; // 10 seconds
 
 unsigned long lastUpdate = 0;
 unsigned long lastBeep = 0;
-bool alarmDone = false;
+bool exitGame = false;
 
 void startDominationMode() {
     if (dominationGameMinutes < 1)
@@ -37,15 +37,19 @@ void startDominationMode() {
         displayController.lcd.print("Set valid time!");
         delay(2000);
         displayController.writeDominationMenu();
-
     }
     
     displayController.lcd.clear();
     int totalSeconds = dominationGameMinutes * 60;
 
-    while (totalSeconds >= 0)
+    while (totalSeconds >= 0 && !exitGame)
     {
         unsigned long now = millis();
+
+        char key = customKeyPad.getKey();
+        if (key == 'B' && redHolding) {
+            exitGame  = true;
+        }
 
         if (now - lastUpdate >= 1000 && totalSeconds >= 0) {
             lastUpdate = now;
@@ -109,7 +113,7 @@ void handleBuzzer(int totalSeconds) {
   }
 
   // Final rapid alarm when timer reaches zero
-  if (totalSeconds == 0 && !alarmDone) {
+  if (totalSeconds == 0) {
     tone(BUZZER_PIN, 2500);  // Continuous
     delay(3000);          // for 3 seconds
     noTone(BUZZER_PIN);
