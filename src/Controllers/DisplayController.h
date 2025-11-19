@@ -16,6 +16,7 @@ extern byte bar5[8];
 
 extern int dominationGameMinutes;
 extern int defuseGameMinutes;
+extern long defuseCodeValue;
 
 class DisplayController {
 public:
@@ -81,11 +82,11 @@ public:
     lcd.setCursor(0, 1);
     lcd.print("1. Start Game");
     lcd.setCursor(0, 2);
-    lcd.print("2. Set Time");
+    lcd.print("2. Time 3. Code");
     lcd.setCursor(0, 3);
-    lcd.print("Time " + String(defuseGameMinutes) + " mins");
-    lcd.setCursor(17, 3);
-    lcd.print("B >");
+    lcd.print(String(defuseGameMinutes) + " mins" + "/Code " + String(defuseCodeValue));
+    lcd.setCursor(18, 3);
+    lcd.print("B>");
     }
 
     void setTimeMenu() {
@@ -94,6 +95,16 @@ public:
     lcd.print("Set Game Time:");
     lcd.setCursor(0, 1);
     lcd.print("Time in minutes:");
+    lcd.setCursor(0, 3);
+    lcd.print("Press A to set");
+    }
+
+    void setCodeMenu() {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Set Plant Code:");
+    lcd.setCursor(0, 1);
+    lcd.print("Code:");
     lcd.setCursor(0, 3);
     lcd.print("Press A to set");
     }

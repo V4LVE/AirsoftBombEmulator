@@ -16,6 +16,7 @@ DisplayController displayController;
 
 int dominationGameMinutes = 0;
 int defuseGameMinutes = 0;
+long defuseCodeValue = 1234;
 
 enum MenuState {
     MAIN_MENU,
@@ -72,13 +73,19 @@ void keypadEvent(KeypadEvent key){
           if (key == '1')
           {
             menustate = IN_GAME_DEFUSE;
-            //startDefuseMode();
+            startDefuseGame();
             menustate = SETUP_GAME_MENU_DEFUSE;
           }
           else if (key == '2')
           {
             menustate = SET_TIME_MENU;
             enterGameTimeDefuse();
+            menustate = SETUP_GAME_MENU_DEFUSE;
+          }
+          else if (key == '3')
+          {
+            menustate = SET_TIME_MENU;
+            enterCodeDefuse();
             menustate = SETUP_GAME_MENU_DEFUSE;
           }
           else if (key == 'B') { // back to game menu

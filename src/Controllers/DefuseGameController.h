@@ -10,6 +10,9 @@ extern DisplayController displayController;
 extern Keypad customKeyPad;
 
 extern int defuseGameMinutes;
+extern long defuseCodeValue;
+
+extern void drawProgressBar(float progress);
 
 extern byte bar1[8];
 extern byte bar2[8];
@@ -17,7 +20,8 @@ extern byte bar3[8];
 extern byte bar4[8];
 extern byte bar5[8];
 
-void startDefuseMode();
+void startDefuseGame();
 void enterGameTimeDefuse();
+void enterCodeDefuse();
 
 #endif

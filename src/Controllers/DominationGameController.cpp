@@ -9,6 +9,7 @@ void handleAssetCapture();
 void drawProgressBar(float progress);
 void setCurrentTeamCapture();
 void displayEndGameStats();
+void resetGame();
 
 bool bombIsBlue = false;
 bool bombIsRed = false;
@@ -38,6 +39,8 @@ void startDominationMode() {
         delay(2000);
         displayController.writeDominationMenu();
     }
+
+    resetGame();
     
     displayController.lcd.clear();
     int totalSeconds = dominationGameMinutes * 60;
@@ -310,3 +313,21 @@ void enterGameTime()
         displayController.writeDominationMenu();
 }
 
+void resetGame()
+{
+    bombIsBlue = false;
+    bombIsRed = false;
+
+    blueTime = 0;
+    redTime = 0;
+
+    blueHoldStart = 0;
+    redHoldStart = 0;
+
+    blueHolding = false;
+    redHolding  = false;
+
+    lastUpdate = 0;
+    lastBeep = 0;
+    exitGame = false;
+}
