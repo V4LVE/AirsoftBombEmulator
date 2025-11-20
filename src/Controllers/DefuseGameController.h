@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "DisplayController.h"
+#include "DefuseGameController.h"
 #include <Config.h>
 #include <keypad.h>
 
@@ -13,6 +14,7 @@ extern int defuseGameMinutes;
 extern long defuseCodeValue;
 
 extern void drawProgressBar(float progress);
+extern void handleBuzzer(int totalSeconds);
 
 extern byte bar1[8];
 extern byte bar2[8];

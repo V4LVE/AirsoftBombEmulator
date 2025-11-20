@@ -1,6 +1,11 @@
 #include "DefuseGameController.h"
 #include <Arduino.h>
 
+#define NOTE_C5  523
+#define NOTE_E5  659
+#define NOTE_G5  784
+#define NOTE_C6  1047
+
 String defuseTimeInput = "";
 String defuseCodeInput = "";
 bool backback = false;
@@ -14,6 +19,8 @@ unsigned long lastUpdateDefuse = 0;
 unsigned long lastBeepDefuse = 0;
 unsigned long timeElapsedBeforeDefuse = 0;
 unsigned long holdStart = 0;
+bool exitGameDefuse = false;
+bool redHoldingDefuse = false;
 
 // Forward declarations
 void writeStartObjectiveScreen();
@@ -23,6 +30,7 @@ void defuseBomb();
 void writeBombBlownScreen();
 void writeBombDefusedScreen();
 void resetGameDefuse();
+void playVictoryMelody();
 
 void startDefuseGame()
 {
@@ -33,6 +41,7 @@ void startDefuseGame()
         displayController.lcd.print("Set valid time!");
         delay(2000);
         displayController.writeDefuseMenu();
+        return;
     }
 
     resetGameDefuse();
@@ -41,9 +50,14 @@ void startDefuseGame()
 
     writeStartObjectiveScreen();
 
-    while (!bombBlown && totalSeconds >= 0 && !bombDefused)
+    while (!bombBlown && totalSeconds >= 0 && !bombDefused && !exitGameDefuse)
     {
         unsigned long now = millis();
+
+        char key = customKeyPad.getKey();
+        if (key == 'B' && redHoldingDefuse) {
+            exitGameDefuse  = true;
+        }
 
         if (!bombArmed)
         {
@@ -71,6 +85,7 @@ void startDefuseGame()
             if (seconds < 10) displayController.lcd.print("0");
             displayController.lcd.print(seconds);
             displayController.lcd.print("  "); // Clear leftover chars
+            handleBuzzer(totalSeconds);
             totalSeconds--;
         }
         
@@ -78,6 +93,7 @@ void startDefuseGame()
     if (bombDefused)
     {
         writeBombDefusedScreen();
+        playVictoryMelody();
     }
     else
     {
@@ -196,7 +212,15 @@ void defuseBomb()
         writeDefuseObjectiveScreen();
     }
     
-
+    if (redPressed)
+    {
+        redHoldingDefuse = true;
+    }
+    else
+    {
+        redHoldingDefuse = false;
+    }
+    
     if (bluePressed && redPressed) {
 
         if (!defusingInProgress) {   // Just started holding
@@ -226,7 +250,9 @@ void writeStartObjectiveScreen()
     displayController.lcd.setCursor(0, 0);
     displayController.lcd.print("Plant the Bomb!");
     displayController.lcd.setCursor(0, 1);
-    displayController.lcd.print("Enter the code! # to s");
+    displayController.lcd.print("Enter the code!");
+    displayController.lcd.setCursor(7, 2);
+    displayController.lcd.print("# to Plant");
     displayController.lcd.setCursor(0, 3);
     displayController.lcd.print("Bomb: Disarmed");
 }
@@ -285,4 +311,20 @@ void resetGameDefuse()
     bombDefused = false;
     defusingInProgress = false;
     timeElapsedBeforeDefuse = 0;
+}
+
+void playVictoryMelody() {
+  tone(BUZZER_PIN, NOTE_C5, 150);
+  delay(180);
+
+  tone(BUZZER_PIN, NOTE_E5, 150);
+  delay(180);
+
+  tone(BUZZER_PIN, NOTE_G5, 200);
+  delay(250);
+
+  tone(BUZZER_PIN, NOTE_C6, 300);
+  delay(350);
+
+  noTone(BUZZER_PIN);
 }

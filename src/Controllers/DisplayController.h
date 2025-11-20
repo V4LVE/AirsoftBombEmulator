@@ -43,8 +43,8 @@ public:
     lcd.print("--Airsoftelite.dk--");
     lcd.setCursor(0, 1);
     lcd.print("1. Select Gamemode");
-    lcd.setCursor(0, 2);
-    lcd.print("2. Admin Menu");
+    lcd.setCursor(0, 3);
+    lcd.print("V 1.0.0");
   }
 
     void writeGameMenu() {
@@ -55,8 +55,6 @@ public:
     lcd.print("1. Domination");
     lcd.setCursor(0, 2);
     lcd.print("2. Defuse the Bomb");
-    lcd.setCursor(0, 3);
-    lcd.print("3. Sabotage");
     lcd.setCursor(17, 3);
     lcd.print("B >");
     }
