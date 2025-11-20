@@ -4,6 +4,7 @@
 #include "Controllers/DefuseGameController.h"
 #include <keypad.h>
 #include <Config.h>
+#include "Drivers/LEDDriver.h"
 
 byte bar1[8] = {B10000,B10000,B10000,B10000,B10000,B10000,B10000,B10000};
 byte bar2[8] = {B11000,B11000,B11000,B11000,B11000,B11000,B11000,B11000};
@@ -13,6 +14,7 @@ byte bar5[8] = {B11111,B11111,B11111,B11111,B11111,B11111,B11111,B11111};
 
 Keypad customKeyPad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 DisplayController displayController;
+LEDDriver ledDriver;
 
 int dominationGameMinutes = 0;
 int defuseGameMinutes = 0;
