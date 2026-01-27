@@ -40,7 +40,7 @@ public:
   void writeMenuScreen() {
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("--Airsoftelite.dk--");
+    lcd.print("--Toftlund Airsoft--");
     lcd.setCursor(0, 1);
     lcd.print("1. Select Gamemode");
     lcd.setCursor(0, 3);
