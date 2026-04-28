@@ -229,13 +229,13 @@ void defuseBomb()
         }
 
         unsigned long heldFor = now - holdStart;
-        float progress = min(1.0, heldFor / 10000.0);
+        float progress = min(1.0, heldFor / 8000.0);
         displayController.lcd.clear();
         displayController.lcd.setCursor(0, 2);
         displayController.lcd.print("Defusing...");
         drawProgressBar(progress);
         
-        if (heldFor >= 10000) {
+        if (heldFor >= 8000) {
             drawProgressBar(1.0); // full bar
             bombArmed = false;
             bombDefused = true;

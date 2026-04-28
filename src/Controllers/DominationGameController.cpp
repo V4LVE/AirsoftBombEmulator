@@ -23,8 +23,8 @@ unsigned long redHoldStart = 0;
 bool blueHolding = false;
 bool redHolding  = false;
 
-const unsigned long neutralTime = 5000;  // 5 seconds
-const unsigned long captureTime = 10000; // 10 seconds
+const unsigned long neutralTime = 4000;  // 4 seconds
+const unsigned long captureTime = 8000; // 8 seconds
 
 unsigned long lastUpdate = 0;
 unsigned long lastBeep = 0;
@@ -159,17 +159,17 @@ void handleAssetCapture() {
 
     unsigned long heldFor = now - blueHoldStart;
 
-    float progress = min(1.0, heldFor / 10000.0);
+    float progress = min(1.0, heldFor / 8000.0);
     drawProgressBar(progress);
 
-    // FIRST 5s: neutralize
+    // FIRST 4s: neutralize
     if (heldFor >= neutralTime && (bombIsRed || bombIsBlue)) {
       bombIsBlue = false;
       bombIsRed = false;
       setCurrentTeamCapture();
     }
 
-    // AFTER 10s: capture for BLUE
+    // AFTER 8s: capture for BLUE
     if (heldFor >= captureTime && !bombIsBlue && !bombIsRed) {
       bombIsBlue = true;
       bombIsRed = false;
@@ -197,17 +197,17 @@ void handleAssetCapture() {
     }
 
     unsigned long heldFor = now - redHoldStart;
-    float progress = min(1.0, heldFor / 10000.0);
+    float progress = min(1.0, heldFor / 8000.0);
     drawProgressBar(progress);
 
-    // FIRST 5s: neutralize
+    // FIRST 4s: neutralize
     if (heldFor >= neutralTime && (bombIsRed || bombIsBlue)) {
       bombIsBlue = false;
       bombIsRed = false;
       setCurrentTeamCapture();
     }
 
-    // AFTER 10s: capture for RED
+    // AFTER 8s: capture for RED
     if (heldFor >= captureTime && !bombIsBlue && !bombIsRed) {
       bombIsRed = true;
       bombIsBlue = false;
