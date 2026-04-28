@@ -1,14 +1,16 @@
 #include "DominationGameController.h"
 #include <Arduino.h>
+#include <string.h>
 
 String dominationTimeInput = "";
 bool back = false;
 
-void handleBuzzer(int totalSeconds);
+void handleBuzzer(int totalSeconds, String blinkColor);
 void handleAssetCapture();
 void drawProgressBar(float progress);
 void setCurrentTeamCapture();
 void displayEndGameStats();
+void resetGame();
 
 bool bombIsBlue = false;
 bool bombIsRed = false;
@@ -22,12 +24,12 @@ unsigned long redHoldStart = 0;
 bool blueHolding = false;
 bool redHolding  = false;
 
-const unsigned long neutralTime = 5000;  // 5 seconds
-const unsigned long captureTime = 10000; // 10 seconds
+const unsigned long neutralTime = 4000;  // 4 seconds
+const unsigned long captureTime = 8000; // 8 seconds
 
 unsigned long lastUpdate = 0;
 unsigned long lastBeep = 0;
-bool alarmDone = false;
+bool exitGame = false;
 
 void startDominationMode() {
     if (dominationGameMinutes < 1)
@@ -37,15 +39,21 @@ void startDominationMode() {
         displayController.lcd.print("Set valid time!");
         delay(2000);
         displayController.writeDominationMenu();
-
     }
+
+    resetGame();
     
     displayController.lcd.clear();
     int totalSeconds = dominationGameMinutes * 60;
 
-    while (totalSeconds >= 0)
+    while (totalSeconds >= 0 && !exitGame)
     {
         unsigned long now = millis();
+
+        char key = customKeyPad.getKey();
+        if (key == 'B' && redHolding) {
+            exitGame  = true;
+        }
 
         if (now - lastUpdate >= 1000 && totalSeconds >= 0) {
             lastUpdate = now;
@@ -69,7 +77,9 @@ void startDominationMode() {
             if (seconds < 10) displayController.lcd.print("0");
             displayController.lcd.print(seconds);
             displayController.lcd.print("  "); // Clear leftover chars
-            handleBuzzer(totalSeconds);
+            if (bombIsBlue) handleBuzzer(totalSeconds, "blue");
+            if (bombIsRed) handleBuzzer(totalSeconds, "red");
+            if (!bombIsBlue && !bombIsRed) handleBuzzer(totalSeconds, "white");
             handleAssetCapture();
             setCurrentTeamCapture();
             totalSeconds--;
@@ -87,7 +97,7 @@ void startDominationMode() {
     }
 }
 
-void handleBuzzer(int totalSeconds) {
+void handleBuzzer(int totalSeconds, String blinkColor) {
   if (totalSeconds > 0) {
     unsigned long now = millis();
 
@@ -104,12 +114,21 @@ void handleBuzzer(int totalSeconds) {
     if (now - lastBeep >= (unsigned long)interval) {
       lastBeep = now;
 
-      tone(BUZZER_PIN, 2000, 40);  // 40ms beep, non-blocking
+      tone(BUZZER_PIN, 2000, 100);  // 40ms beep, non-blocking
+
+      // Blink corresponding LED
+      if (blinkColor == "blue") {
+        ledDriver.blinkBlue();
+      } else if (blinkColor == "red") {
+        ledDriver.blinkRed();
+      } else {
+        ledDriver.blinkWhite();
+      }
     }
   }
 
   // Final rapid alarm when timer reaches zero
-  if (totalSeconds == 0 && !alarmDone) {
+  if (totalSeconds == 0) {
     tone(BUZZER_PIN, 2500);  // Continuous
     delay(3000);          // for 3 seconds
     noTone(BUZZER_PIN);
@@ -152,17 +171,17 @@ void handleAssetCapture() {
 
     unsigned long heldFor = now - blueHoldStart;
 
-    float progress = min(1.0, heldFor / 10000.0);
+    float progress = min(1.0, heldFor / 8000.0);
     drawProgressBar(progress);
 
-    // FIRST 5s: neutralize
+    // FIRST 4s: neutralize
     if (heldFor >= neutralTime && (bombIsRed || bombIsBlue)) {
       bombIsBlue = false;
       bombIsRed = false;
       setCurrentTeamCapture();
     }
 
-    // AFTER 10s: capture for BLUE
+    // AFTER 8s: capture for BLUE
     if (heldFor >= captureTime && !bombIsBlue && !bombIsRed) {
       bombIsBlue = true;
       bombIsRed = false;
@@ -190,17 +209,17 @@ void handleAssetCapture() {
     }
 
     unsigned long heldFor = now - redHoldStart;
-    float progress = min(1.0, heldFor / 10000.0);
+    float progress = min(1.0, heldFor / 8000.0);
     drawProgressBar(progress);
 
-    // FIRST 5s: neutralize
+    // FIRST 4s: neutralize
     if (heldFor >= neutralTime && (bombIsRed || bombIsBlue)) {
       bombIsBlue = false;
       bombIsRed = false;
       setCurrentTeamCapture();
     }
 
-    // AFTER 10s: capture for RED
+    // AFTER 8s: capture for RED
     if (heldFor >= captureTime && !bombIsBlue && !bombIsRed) {
       bombIsRed = true;
       bombIsBlue = false;
@@ -306,3 +325,21 @@ void enterGameTime()
         displayController.writeDominationMenu();
 }
 
+void resetGame()
+{
+    bombIsBlue = false;
+    bombIsRed = false;
+
+    blueTime = 0;
+    redTime = 0;
+
+    blueHoldStart = 0;
+    redHoldStart = 0;
+
+    blueHolding = false;
+    redHolding  = false;
+
+    lastUpdate = 0;
+    lastBeep = 0;
+    exitGame = false;
+}

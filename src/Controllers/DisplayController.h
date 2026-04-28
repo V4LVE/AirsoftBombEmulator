@@ -15,6 +15,8 @@ extern byte bar5[8];
 #include <LCD.h>
 
 extern int dominationGameMinutes;
+extern int defuseGameMinutes;
+extern long defuseCodeValue;
 
 class DisplayController {
 public:
@@ -38,11 +40,11 @@ public:
   void writeMenuScreen() {
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("--Airsoftelite.dk--");
+    lcd.print("--Toftlund Airsoft--");
     lcd.setCursor(0, 1);
     lcd.print("1. Select Gamemode");
-    lcd.setCursor(0, 2);
-    lcd.print("2. Admin Menu");
+    lcd.setCursor(0, 3);
+    lcd.print("V 1.0.0");
   }
 
     void writeGameMenu() {
@@ -53,8 +55,6 @@ public:
     lcd.print("1. Domination");
     lcd.setCursor(0, 2);
     lcd.print("2. Defuse the Bomb");
-    lcd.setCursor(0, 3);
-    lcd.print("3. Sabotage");
     lcd.setCursor(17, 3);
     lcd.print("B >");
     }
@@ -73,12 +73,36 @@ public:
     lcd.print("B >");
     }
 
+    void writeDefuseMenu() {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Defuse Mode");
+    lcd.setCursor(0, 1);
+    lcd.print("1. Start Game");
+    lcd.setCursor(0, 2);
+    lcd.print("2. Time 3. Code");
+    lcd.setCursor(0, 3);
+    lcd.print(String(defuseGameMinutes) + " mins" + "/Code " + String(defuseCodeValue));
+    lcd.setCursor(18, 3);
+    lcd.print("B>");
+    }
+
     void setTimeMenu() {
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Set Game Time:");
     lcd.setCursor(0, 1);
     lcd.print("Time in minutes:");
+    lcd.setCursor(0, 3);
+    lcd.print("Press A to set");
+    }
+
+    void setCodeMenu() {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Set Plant Code:");
+    lcd.setCursor(0, 1);
+    lcd.print("Code:");
     lcd.setCursor(0, 3);
     lcd.print("Press A to set");
     }
