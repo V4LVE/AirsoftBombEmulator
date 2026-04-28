@@ -3,11 +3,13 @@
 
 #include <Arduino.h>
 #include "DisplayController.h"
+#include "Drivers/LEDDriver.h"
 #include <Config.h>
 #include <keypad.h>
 
 extern DisplayController displayController;
 extern Keypad customKeyPad;
+extern LEDDriver ledDriver;
 
 extern int dominationGameMinutes;
 
@@ -20,4 +22,4 @@ extern byte bar5[8];
 void startDominationMode();
 void enterGameTime();
 
-#endif;
+#endif

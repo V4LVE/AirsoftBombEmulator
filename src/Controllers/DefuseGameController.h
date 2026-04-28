@@ -14,7 +14,7 @@ extern int defuseGameMinutes;
 extern long defuseCodeValue;
 
 extern void drawProgressBar(float progress);
-extern void handleBuzzer(int totalSeconds);
+extern void handleBuzzer(int totalSeconds, String blinkColor);
 
 extern byte bar1[8];
 extern byte bar2[8];

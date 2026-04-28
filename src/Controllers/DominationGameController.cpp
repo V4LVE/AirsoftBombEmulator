@@ -1,10 +1,11 @@
 #include "DominationGameController.h"
 #include <Arduino.h>
+#include <string.h>
 
 String dominationTimeInput = "";
 bool back = false;
 
-void handleBuzzer(int totalSeconds);
+void handleBuzzer(int totalSeconds, String blinkColor);
 void handleAssetCapture();
 void drawProgressBar(float progress);
 void setCurrentTeamCapture();
@@ -76,7 +77,9 @@ void startDominationMode() {
             if (seconds < 10) displayController.lcd.print("0");
             displayController.lcd.print(seconds);
             displayController.lcd.print("  "); // Clear leftover chars
-            handleBuzzer(totalSeconds);
+            if (bombIsBlue) handleBuzzer(totalSeconds, "blue");
+            if (bombIsRed) handleBuzzer(totalSeconds, "red");
+            if (!bombIsBlue && !bombIsRed) handleBuzzer(totalSeconds, "white");
             handleAssetCapture();
             setCurrentTeamCapture();
             totalSeconds--;
@@ -94,7 +97,7 @@ void startDominationMode() {
     }
 }
 
-void handleBuzzer(int totalSeconds) {
+void handleBuzzer(int totalSeconds, String blinkColor) {
   if (totalSeconds > 0) {
     unsigned long now = millis();
 
@@ -111,7 +114,16 @@ void handleBuzzer(int totalSeconds) {
     if (now - lastBeep >= (unsigned long)interval) {
       lastBeep = now;
 
-      tone(BUZZER_PIN, 2000, 40);  // 40ms beep, non-blocking
+      tone(BUZZER_PIN, 2000, 100);  // 40ms beep, non-blocking
+
+      // Blink corresponding LED
+      if (blinkColor == "blue") {
+        ledDriver.blinkBlue();
+      } else if (blinkColor == "red") {
+        ledDriver.blinkRed();
+      } else {
+        ledDriver.blinkWhite();
+      }
     }
   }
 

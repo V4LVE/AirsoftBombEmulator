@@ -85,7 +85,7 @@ void startDefuseGame()
             if (seconds < 10) displayController.lcd.print("0");
             displayController.lcd.print(seconds);
             displayController.lcd.print("  "); // Clear leftover chars
-            handleBuzzer(totalSeconds);
+            handleBuzzer(totalSeconds, "red");
             totalSeconds--;
         }
         

@@ -4,7 +4,6 @@
 #include "Controllers/DefuseGameController.h"
 #include <keypad.h>
 #include <Config.h>
-#include "Drivers/LEDDriver.h"
 
 byte bar1[8] = {B10000,B10000,B10000,B10000,B10000,B10000,B10000,B10000};
 byte bar2[8] = {B11000,B11000,B11000,B11000,B11000,B11000,B11000,B11000};

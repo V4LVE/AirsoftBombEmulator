@@ -9,7 +9,7 @@ const int BUTTON_PIN_RED = 12;
 
 #define LED_PIN     13
 #define NUM_LEDS    60
-#define BRIGHTNESS  64
+#define BRIGHTNESS  255
 
 const byte ROWS = 4; // four rows
 const byte COLS = 4; // four columns
