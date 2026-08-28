@@ -8,7 +8,7 @@ const int BUTTON_PIN_BLUE = 11;
 const int BUTTON_PIN_RED = 12;
 
 #define LED_PIN     13
-#define NUM_LEDS    60
+#define NUM_LEDS    47
 #define BRIGHTNESS  255
 
 const byte ROWS = 4; // four rows
