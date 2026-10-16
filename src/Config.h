@@ -3,8 +3,11 @@
 
 // Hardware and behavior defaults. Runtime menu settings live in GameSettings.
 namespace Config {
+enum class LedColorOrder : uint8_t { RGB, RBG, GRB, GBR, BRG, BGR };
 constexpr uint8_t buzzerPin = 10, blueButtonPin = 11, redButtonPin = 12;
 constexpr uint8_t ledPin = 13, ledCount = 60, brightness = 255;
+// BRG swaps the green/blue channels relative to NEOPIXEL's fixed GRB order.
+constexpr LedColorOrder ledColorOrder = LedColorOrder::BRG;
 constexpr uint8_t lcdAddress = 0x27, lcdColumns = 20, lcdRows = 4;
 constexpr uint8_t keypadRows = 4, keypadColumns = 4;
 constexpr uint8_t keypadRowPins[keypadRows] = {9, 8, 7, 6};

@@ -6,10 +6,21 @@
 
 enum class Light : uint8_t { Off, White, Blue, Red };
 
+namespace LEDDetail {
+// Keep FastLED types out of the hardware-independent configuration and game rules.
+constexpr EOrder colorOrder(Config::LedColorOrder order) {
+    return order == Config::LedColorOrder::RGB ? RGB :
+           order == Config::LedColorOrder::RBG ? RBG :
+           order == Config::LedColorOrder::GRB ? GRB :
+           order == Config::LedColorOrder::GBR ? GBR :
+           order == Config::LedColorOrder::BRG ? BRG : BGR;
+}
+}
+
 class LEDDriver {
 public:
     void begin() {
-        FastLED.addLeds<NEOPIXEL, Config::ledPin>(leds_, Config::ledCount);
+        FastLED.addLeds<WS2812, Config::ledPin, LEDDetail::colorOrder(Config::ledColorOrder)>(leds_, Config::ledCount);
         FastLED.setBrightness(Config::brightness);
         fill_solid(leds_, Config::ledCount, CRGB::Black);
         FastLED.show();

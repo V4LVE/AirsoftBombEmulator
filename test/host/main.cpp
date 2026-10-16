@@ -140,8 +140,15 @@ void testEffectsAndDisplay() {
     CHECK(Fake::sounds[1].at - Fake::sounds[0].at == Config::fastestBeepMs);
     leds.pulse(Light::Blue, 1000);
     CHECK(Fake::stripColor.b == 255 && Fake::stripColor.g == 0);
+    // This strip expects B,R,G on the wire; checking CRGB alone misses order errors.
+    CHECK(Fake::wireBytes[0] == 255 && Fake::wireBytes[1] == 0 && Fake::wireBytes[2] == 0);
+    leds.pulse(Light::Red, 1000);
+    CHECK(Fake::wireBytes[0] == 0 && Fake::wireBytes[1] == 255 && Fake::wireBytes[2] == 0);
+    leds.pulse(Light::White, 1000);
+    CHECK(Fake::wireBytes[0] == 255 && Fake::wireBytes[1] == 255 && Fake::wireBytes[2] == 255);
     leds.update(1012);
     CHECK(Fake::stripColor.b == 0);
+    CHECK(Fake::wireBytes[0] == 0 && Fake::wireBytes[1] == 0 && Fake::wireBytes[2] == 0);
     Fake::sounds.clear();
     effects.countdown(59000);
     for (Fake::now = 59001; Fake::now < 60000; ++Fake::now)

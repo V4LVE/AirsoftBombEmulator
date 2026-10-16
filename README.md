@@ -15,7 +15,9 @@ The default environment is `nanoatmega328`, configured to upload on COM3 using t
 
 ## Configuration and wiring
 
-Edit `src/Config.h` for pin assignments, keypad mapping, LCD backpack mapping, LED count/brightness, input debounce, display cadence, capture/defuse holds, beep cadence, pulse lengths, alarm and victory melody, duration limits and game defaults. Invalid combinations are rejected at compile time. Screen layouts require a 20x4 display and support up to six code digits and three time digits.
+Edit `src/Config.h` for pin assignments, keypad mapping, LCD backpack mapping, LED count/brightness/color order, input debounce, display cadence, capture/defuse holds, beep cadence, pulse lengths, alarm and victory melody, duration limits and game defaults. Invalid combinations are rejected at compile time. Screen layouts require a 20x4 display and support up to six code digits and three time digits.
+
+`Config::ledColorOrder` is set to `LedColorOrder::BRG` based on the reported blue-to-green output with the previous fixed GRB order. This swaps green/blue while preserving red. Verify blue, red and white on the strip after uploading. For a replacement strip, select its RGB, RBG, GRB, GBR, BRG or BGR order here; game colors remain logical RGB values.
 
 | Device | Default connection |
 | --- | --- |
