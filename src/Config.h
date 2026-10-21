@@ -23,7 +23,7 @@ constexpr bool lcdBacklightPositive = true;
 constexpr uint16_t keypadDebounceMs = 10, buttonDebounceMs = 25;
 constexpr uint32_t displayRefreshMs = 100;
 constexpr uint32_t neutralizeMs = 4000, captureMs = 8000, defuseMs = 8000;
-constexpr uint32_t fastestBeepMs = 30, slowestBeepMs = 5000;
+constexpr uint32_t fastestBeepMs = 150, slowestBeepMs = 6000;
 constexpr uint16_t beepDurationMs = 12, ledPulseMs = 12;
 constexpr uint16_t beepFrequency = 2000, alarmFrequency = 2500;
 constexpr uint32_t alarmDurationMs = 3000;
